@@ -41,4 +41,29 @@ async function enqueueInitialAttempt({ deliveryId, applicationId, endpointId, ev
   );
 }
 
-module.exports = { deliveryQueue, DELIVERY_QUEUE_NAME, deliveryJobId, enqueueInitialAttempt };
+/**
+ * Enqueues a retry after a previous attempt failed, delayed according to
+ * the backoff schedule. Uses the same deterministic job-id scheme as the
+ * initial attempt, so re-scheduling the same retry twice (e.g. a crash
+ * right after the DB update but before this call, followed by a recovery
+ * re-run) is a no-op at the BullMQ level rather than a duplicate job.
+ *
+ * @param {{ deliveryId: string, applicationId: string, endpointId: string, eventId: string }} params
+ * @param {number} attemptNumber - the attempt being scheduled (>= 2).
+ * @param {number} delayMs - milliseconds to wait before this attempt runs.
+ */
+async function enqueueRetryAttempt({ deliveryId, applicationId, endpointId, eventId }, attemptNumber, delayMs) {
+  await deliveryQueue.add(
+    'deliver',
+    { deliveryId, applicationId, endpointId, eventId, attemptNumber },
+    { jobId: deliveryJobId(deliveryId, attemptNumber), delay: delayMs }
+  );
+}
+
+module.exports = {
+  deliveryQueue,
+  DELIVERY_QUEUE_NAME,
+  deliveryJobId,
+  enqueueInitialAttempt,
+  enqueueRetryAttempt,
+};
