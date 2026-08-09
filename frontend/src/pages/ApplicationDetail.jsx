@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AppShell } from '../components/layout/AppShell';
+import { ApplicationTabs } from '../components/applications/ApplicationTabs';
 import { Card } from '../components/common/Card';
 import { Badge } from '../components/common/Badge';
 import { Button } from '../components/common/Button';
+import { Pagination } from '../components/common/Pagination';
 import { ApiKeyRevealModal } from '../components/applications/ApiKeyRevealModal';
+import { EventList } from '../components/events/EventList';
+import { EventFilterBar } from '../components/events/EventFilterBar';
 import * as applicationService from '../services/applicationService';
+import * as eventService from '../services/eventService';
+import { usePagination } from '../hooks/usePagination';
 import { formatDate } from '../utils/formatters';
 
 export default function ApplicationDetail() {
@@ -15,12 +21,31 @@ export default function ApplicationDetail() {
   const [revealedCredentials, setRevealedCredentials] = useState(null);
   const [rotating, setRotating] = useState(null);
 
+  const [eventFilters, setEventFilters] = useState({ eventType: '', from: '', to: '' });
+  const { page, pageSize, setPage } = usePagination();
+  const [eventPage, setEventPage] = useState({ events: [], pagination: { totalPages: 0 } });
+  const [isEventsLoading, setIsEventsLoading] = useState(true);
+
   useEffect(() => {
     applicationService.getApplication(appId).then((app) => {
       setApplication(app);
       setIsLoading(false);
     });
   }, [appId]);
+
+  useEffect(() => {
+    setIsEventsLoading(true);
+    eventService
+      .listEvents(appId, { ...eventFilters, page, pageSize })
+      .then(setEventPage)
+      .finally(() => setIsEventsLoading(false));
+  }, [appId, eventFilters, page, pageSize]);
+
+  function handleFilterChange(nextFilters) {
+    const { page: filterPage, ...rest } = nextFilters;
+    setEventFilters(rest);
+    setPage(filterPage ?? 1);
+  }
 
   async function handleRotateSecret() {
     setRotating('secret');
@@ -60,6 +85,8 @@ export default function ApplicationDetail() {
 
   return (
     <AppShell title={application.name}>
+      <ApplicationTabs appId={appId} />
+
       <div className="flex flex-col gap-4">
         <Card className="p-5">
           <div className="mb-4 flex items-center gap-3">
@@ -96,8 +123,21 @@ export default function ApplicationDetail() {
           <p className="text-sm text-text-muted">
             POST to <code className="rounded bg-bg px-1.5 py-0.5 font-mono text-xs text-text">/api/ingest</code> with
             your API key as a Bearer token, an <code className="font-mono text-xs">eventType</code>, and a JSON{' '}
-            <code className="font-mono text-xs">payload</code>. Matching endpoints below receive it automatically.
+            <code className="font-mono text-xs">payload</code>. Matching endpoints receive it automatically.
           </p>
+        </Card>
+
+        <Card>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
+            <h3 className="font-display text-sm font-medium text-text">Events</h3>
+            <EventFilterBar filters={{ ...eventFilters, page }} onChange={handleFilterChange} />
+          </div>
+          {isEventsLoading ? (
+            <p className="p-6 text-center font-mono text-sm text-text-muted">loading…</p>
+          ) : (
+            <EventList events={eventPage.events} appId={appId} />
+          )}
+          <Pagination page={page} totalPages={eventPage.pagination.totalPages} onPageChange={setPage} />
         </Card>
       </div>
 

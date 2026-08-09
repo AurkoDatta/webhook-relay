@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ApplicationsList from './pages/ApplicationsList';
 import ApplicationDetail from './pages/ApplicationDetail';
+import Endpoints from './pages/Endpoints';
+import EventDetail from './pages/EventDetail';
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/applications" element={<ApplicationsList />} />
           <Route path="/applications/:appId" element={<ApplicationDetail />} />
+          <Route path="/applications/:appId/endpoints" element={<Endpoints />} />
+          <Route path="/applications/:appId/events/:eventId" element={<EventDetail />} />
         </Route>
 
         <Route path="/" element={<Navigate to="/applications" replace />} />
