@@ -17,6 +17,8 @@ const authRoutes = require('./routes/authRoutes');
 const applicationRoutes = require('./routes/applicationRoutes');
 const endpointRoutes = require('./routes/endpointRoutes');
 const ingestRoutes = require('./routes/ingestRoutes');
+const eventRoutes = require('./routes/eventRoutes');
+const deliveryRoutes = require('./routes/deliveryRoutes');
 const ApiError = require('./utils/ApiError');
 
 const app = express();
@@ -41,6 +43,8 @@ app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 app.use('/api/auth', express.json({ limit: '1mb' }), authRoutes);
 app.use('/api/applications', express.json({ limit: '1mb' }), applicationRoutes);
 app.use('/api/endpoints', express.json({ limit: '1mb' }), endpointRoutes);
+app.use('/api/events', express.json({ limit: '1mb' }), eventRoutes);
+app.use('/api/deliveries', express.json({ limit: '1mb' }), deliveryRoutes);
 app.use('/api/ingest', ingestRoutes);
 
 app.use((req, res, next) => {

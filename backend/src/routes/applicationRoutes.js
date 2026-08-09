@@ -6,11 +6,14 @@
 const { Router } = require('express');
 const applicationController = require('../controllers/applicationController');
 const endpointController = require('../controllers/endpointController');
+const eventController = require('../controllers/eventController');
+const statsController = require('../controllers/statsController');
 const jwtAuthMiddleware = require('../middleware/jwtAuthMiddleware');
 const validateRequest = require('../middleware/validateRequest');
 const { requireApplicationOwnership } = require('../middleware/tenantScopeGuard');
 const { createApplicationSchema, applicationIdSchema } = require('../validators/applicationSchemas');
 const { createEndpointSchema } = require('../validators/endpointSchemas');
+const { listEventsSchema } = require('../validators/eventSchemas');
 
 const router = Router();
 
@@ -52,6 +55,20 @@ router.get(
   validateRequest(applicationIdSchema),
   requireApplicationOwnership,
   endpointController.list
+);
+
+router.get(
+  '/:id/events',
+  validateRequest(listEventsSchema),
+  requireApplicationOwnership,
+  eventController.list
+);
+
+router.get(
+  '/:id/stats',
+  validateRequest(applicationIdSchema),
+  requireApplicationOwnership,
+  statsController.get
 );
 
 module.exports = router;
