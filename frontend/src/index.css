@@ -1,0 +1,90 @@
+@import 'tailwindcss';
+
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/600.css';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+
+/*
+ * Design tokens for the "instrument panel" theme: a graphite console with a
+ * signal-amber accent (a relay/telegraph indicator lamp), cyan for
+ * in-flight/retrying state, and desaturated success/danger so nothing
+ * competes with the amber accent. See docs/superpowers if this ever needs
+ * revisiting — chosen deliberately to avoid generic dark-mode-plus-neon
+ * dashboard defaults.
+ */
+@theme {
+  --color-bg: #0f1215;
+  --color-surface: #171b1f;
+  --color-surface-raised: #1f252b;
+  --color-border: #2a3138;
+  --color-border-strong: #3a434c;
+
+  --color-text: #e7eaed;
+  --color-text-muted: #8b949c;
+  --color-text-faint: #5b636b;
+
+  --color-accent: #ffb020;
+  --color-accent-dim: #7a5a1e;
+  --color-accent-soft: #40311a;
+
+  --color-info: #4fc3f7;
+  --color-info-soft: #17323d;
+
+  --color-success: #3ddc84;
+  --color-success-soft: #17331f;
+
+  --color-danger: #ff5d5d;
+  --color-danger-soft: #3a1e1e;
+
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* The "signal pulse" motif — an expanding, fading ring used behind the
+   retrying-state indicator to echo the product's actual retry mechanic. */
+@keyframes signal-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.signal-pulse-ring {
+  animation: signal-pulse 1.6s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
