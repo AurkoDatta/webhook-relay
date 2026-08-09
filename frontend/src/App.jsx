@@ -7,6 +7,7 @@ import ApplicationsList from './pages/ApplicationsList';
 import ApplicationDetail from './pages/ApplicationDetail';
 import Endpoints from './pages/Endpoints';
 import EventDetail from './pages/EventDetail';
+import Analytics from './pages/Analytics';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/applications/:appId" element={<ApplicationDetail />} />
           <Route path="/applications/:appId/endpoints" element={<Endpoints />} />
           <Route path="/applications/:appId/events/:eventId" element={<EventDetail />} />
+          <Route path="/applications/:appId/analytics" element={<Analytics />} />
         </Route>
 
         <Route path="/" element={<Navigate to="/applications" replace />} />
