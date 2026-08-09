@@ -14,6 +14,8 @@ const env = require('./config/env');
 const logger = require('./utils/logger');
 const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require('./routes/authRoutes');
+const applicationRoutes = require('./routes/applicationRoutes');
+const endpointRoutes = require('./routes/endpointRoutes');
 const ApiError = require('./utils/ApiError');
 
 const app = express();
@@ -32,6 +34,8 @@ app.use(pinoHttp({ logger, autoLogging: env.nodeEnv !== 'test' }));
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/applications', applicationRoutes);
+app.use('/api/endpoints', endpointRoutes);
 
 app.use((req, res, next) => {
   next(new ApiError(404, 'NOT_FOUND', `No route matches ${req.method} ${req.path}`));
