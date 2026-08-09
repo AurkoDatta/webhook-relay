@@ -7,6 +7,7 @@ import { SuccessRateChart } from '../components/analytics/SuccessRateChart';
 import { LatencyChart } from '../components/analytics/LatencyChart';
 import * as statsService from '../services/statsService';
 
+/** "Analytics" tab: aggregate totals, success-rate trend, and per-endpoint latency/failure charts. */
 export default function Analytics() {
   const { appId } = useParams();
   const [stats, setStats] = useState(null);

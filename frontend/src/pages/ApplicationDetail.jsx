@@ -14,6 +14,11 @@ import * as eventService from '../services/eventService';
 import { usePagination } from '../hooks/usePagination';
 import { formatDate } from '../utils/formatters';
 
+/**
+ * The "Overview" tab of an application: credentials with rotate actions,
+ * ingest instructions, and the paginated/filterable event list. Endpoints
+ * and Analytics are separate sibling pages under ApplicationTabs.
+ */
 export default function ApplicationDetail() {
   const { appId } = useParams();
   const [application, setApplication] = useState(null);
@@ -41,6 +46,10 @@ export default function ApplicationDetail() {
       .finally(() => setIsEventsLoading(false));
   }, [appId, eventFilters, page, pageSize]);
 
+  // EventFilterBar bundles the page number into the object it hands back
+  // (it resets to page 1 on every filter edit) — split it out so filters
+  // and pagination stay in separate state, matching how the events effect
+  // above depends on them individually.
   function handleFilterChange(nextFilters) {
     const { page: filterPage, ...rest } = nextFilters;
     setEventFilters(rest);

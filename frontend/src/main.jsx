@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App.jsx';
 
+/** Application entry point: mounts the React tree and wires up client-side routing. */
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

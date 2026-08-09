@@ -9,6 +9,7 @@ import { EndpointList } from '../components/endpoints/EndpointList';
 import { EndpointForm } from '../components/endpoints/EndpointForm';
 import * as endpointService from '../services/endpointService';
 
+/** "Endpoints" tab: CRUD for an application's subscriber endpoints, plus pause/reactivate. */
 export default function Endpoints() {
   const { appId } = useParams();
   const [endpoints, setEndpoints] = useState([]);

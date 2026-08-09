@@ -7,6 +7,7 @@ import { Modal } from '../components/common/Modal';
 import { Button } from '../components/common/Button';
 import * as applicationService from '../services/applicationService';
 
+/** Landing page after login: lists the user's applications and handles creating new ones. */
 export default function ApplicationsList() {
   const [applications, setApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

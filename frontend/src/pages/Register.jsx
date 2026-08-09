@@ -7,6 +7,7 @@ import { AuthLayout } from '../components/layout/AuthLayout';
 const inputClass =
   'w-full rounded-md border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-text-faint focus:border-accent focus:outline-none';
 
+/** Account creation page. Registration doesn't start a session — the user signs in separately afterward. */
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();

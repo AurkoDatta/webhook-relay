@@ -9,6 +9,11 @@ import Endpoints from './pages/Endpoints';
 import EventDetail from './pages/EventDetail';
 import Analytics from './pages/Analytics';
 
+/**
+ * Top-level route table. Auth pages are public; everything under an
+ * application is gated by ProtectedRoute, which checks AuthContext for an
+ * active session before rendering its children.
+ */
 export default function App() {
   return (
     <AuthProvider>

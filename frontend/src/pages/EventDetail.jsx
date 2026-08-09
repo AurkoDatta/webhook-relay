@@ -12,6 +12,7 @@ import { formatDate } from '../utils/formatters';
 
 const POLL_INTERVAL_MS = 4000;
 
+/** A single event's payload plus live per-endpoint delivery/retry status, with manual replay. */
 export default function EventDetail() {
   const { appId, eventId } = useParams();
   const [event, setEvent] = useState(null);

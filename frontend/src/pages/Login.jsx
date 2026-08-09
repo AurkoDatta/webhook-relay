@@ -7,6 +7,7 @@ import { AuthLayout } from '../components/layout/AuthLayout';
 const inputClass =
   'w-full rounded-md border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-text-faint focus:border-accent focus:outline-none';
 
+/** Dashboard sign-in page; on success, AuthContext holds the session and we redirect into the app. */
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
